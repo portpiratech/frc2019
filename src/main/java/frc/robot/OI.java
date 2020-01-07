@@ -9,6 +9,10 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.GrabberCommand;
+import frc.robot.commands.LifterCommand;
+import frc.robot.commands.ScrewLiftCommand;
+import frc.robot.commands.ToggleDriveModeCommand;
 
 
 /**
@@ -46,29 +50,38 @@ public class OI {
 
   public static XboxController driverController;
 	public static XboxController operatorController;
-	public static JoystickButton backButtonDriver;
+  public static JoystickButton backButtonDriver;
+  public static JoystickButton yButtonDriver;
 	public static JoystickButton yButtonOperator;
 	public static JoystickButton xButtonOperator;
 	public static JoystickButton aButtonOperator;
 	public static JoystickButton bButtonOperator;
 	public static JoystickButton backButtonOperator;
 	public static JoystickButton startButtonOperator;
-	
+  public static JoystickButton leftBumperOperator;
+  public static JoystickButton rightBumperOperator;
 	
 	public OI() {
 		driverController = new XboxController(RobotMap.driverControllerId);
 		operatorController = new XboxController(RobotMap.operatorControllerId);
 		
 		//name buttons to include which controller
-		backButtonDriver = new JoystickButton(driverController, 7);
+    backButtonDriver = new JoystickButton(driverController, 7);
+    yButtonDriver = new JoystickButton(driverController, 4);
 		yButtonOperator = new JoystickButton(operatorController, 4);
 		xButtonOperator = new JoystickButton(operatorController, 3);
 		aButtonOperator = new JoystickButton(operatorController, 1);
 		bButtonOperator = new JoystickButton(operatorController, 2);
 		backButtonOperator = new JoystickButton(operatorController, 7);
-		startButtonOperator = new JoystickButton(operatorController, 8);
+    startButtonOperator = new JoystickButton(operatorController, 8);
+    leftBumperOperator = new JoystickButton(operatorController, 5);
+    rightBumperOperator = new JoystickButton(operatorController, 6);
 		
     //OPERATOR LEFT TRIGGER + RIGHT TRIGGER --> LOCK LIFTER
-    
+    backButtonDriver.whenPressed(new ToggleDriveModeCommand());
+    xButtonOperator.whenPressed(new ScrewLiftCommand(true));
+    aButtonOperator.whenPressed(new ScrewLiftCommand(false));
+    rightBumperOperator.whenPressed(new GrabberCommand());
+    yButtonOperator.whenPressed(new LifterCommand());
   }
 }

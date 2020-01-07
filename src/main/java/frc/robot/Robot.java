@@ -7,15 +7,18 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+//import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrainSubsystem;
-
-
-
+import frc.robot.subsystems.GrabberSubsystem;
+import frc.robot.subsystems.LifterSubsystem;
+import frc.robot.subsystems.ScrewLiftSubsystem;
+import frc.robot.subsystems.ToggleDriveModeSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,12 +28,20 @@ import frc.robot.subsystems.DriveTrainSubsystem;
  * project.
  */
 public class Robot extends TimedRobot {
+  public static DriveMode driveMode;
+	
+	public static enum DriveMode {
+		TankDrive,
+		ArcadeDrive
+	}
 
   public static OI m_oi;
 
   public static DriveTrainSubsystem driveTrainSubsystem = new DriveTrainSubsystem();
-  
-
+  public static ToggleDriveModeSubsystem toggleDriveMode = new ToggleDriveModeSubsystem();
+  public static ScrewLiftSubsystem screwLiftSubsystem = new ScrewLiftSubsystem();
+  public static LifterSubsystem liftSubsystem; 
+  public static GrabberSubsystem grabberSubsystem; 
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -41,9 +52,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    liftSubsystem = new LifterSubsystem();
+    grabberSubsystem = new GrabberSubsystem();
+    UsbCamera cam;
     m_oi = new OI();
     // chooser.addObject("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+    Robot.driveMode = Robot.DriveMode.TankDrive;
+    cam = CameraServer.getInstance().startAutomaticCapture();
+    cam.setResolution(240, 220);
+    cam.setFPS(25);
+    //CameraServer.getInstance().startAutomaticCapture();
   }
 
   /**

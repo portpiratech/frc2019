@@ -8,26 +8,35 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+//import frc.robot.OI;
 import frc.robot.Robot;
 
-public class DriveCommand extends Command {
-  //double leftSpeed;
-  //double rightSpeed;
-
-  public DriveCommand() {
-      requires(Robot.driveTrainSubsystem);
+public class ScrewLiftCommand extends Command {
+  double liftSpeed;
+  double backLiftSpeed;
+  boolean goingUp; 
+  
+  public ScrewLiftCommand(boolean goingUp) {
+    this.goingUp = goingUp;
+    requires(Robot.screwLiftSubsystem);
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
-// Called just before this Command runs the first time
+
+  // Called just before this Command runs the first time
   @Override
   protected void initialize() {
   }
 
   // Called repeatedly when this Command is scheduled to run
-  @Override
   protected void execute() {
-    Robot.driveTrainSubsystem.drive();
+    if(goingUp){
+      Robot.screwLiftSubsystem.lift();
+    }else if(goingUp == false){
+      Robot.screwLiftSubsystem.unLift();
+    }
+    
   }
-
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
@@ -39,7 +48,7 @@ public class DriveCommand extends Command {
   protected void end() {
 
   }
-  
+
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
